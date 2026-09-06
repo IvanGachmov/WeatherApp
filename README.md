@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# WeatherApp
-=======
 # 5-Day Weather Forecast
 
 A React + TypeScript web app (Vite) that shows a 5-day weather forecast
@@ -99,4 +96,3 @@ typed props — no global state library or Context involved.
 - Debounce/autocomplete for city search (e.g. via OpenWeatherMap's geocoding API).
 - Persist the last-searched city/units in localStorage.
 - Graph the hourly temperature trend for the selected day.
->>>>>>> 879be60 (initialize AI-generated implementation)
