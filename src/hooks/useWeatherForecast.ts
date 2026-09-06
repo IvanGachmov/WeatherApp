@@ -6,7 +6,7 @@ import type { ForecastApiResponse, ForecastDay, Units } from "../types/weather";
 type Query =
   { type: "city"; city: string } | { type: "coords"; lat: number; lon: number };
 
-export default function useWeatherForeecast() {
+export default function useWeatherForecast() {
   const [days, setDays] = useState<ForecastDay[]>([]);
   const [cityLabel, setCityLabel] = useState("");
   const [units, setUnits] = useState<Units>("metric");

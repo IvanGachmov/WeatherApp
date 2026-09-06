@@ -3,5 +3,5 @@ export default function LoadingSpinner() {
     <div className="loading" role="status">
       Loading forecast…
     </div>
-  )
+  );
 }

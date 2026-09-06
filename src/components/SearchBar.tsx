@@ -1,18 +1,18 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from "react";
 
 interface SearchBarProps {
-  onSearch: (city: string) => void
-  disabled?: boolean
+  onSearch: (city: string) => void;
+  disabled?: boolean;
 }
 
 export default function SearchBar({ onSearch, disabled }: SearchBarProps) {
-  const [city, setCity] = useState('')
+  const [city, setCity] = useState("");
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const trimmed = city.trim()
+    e.preventDefault();
+    const trimmed = city.trim();
     if (trimmed) {
-      onSearch(trimmed)
+      onSearch(trimmed);
     }
   }
 
@@ -30,5 +30,5 @@ export default function SearchBar({ onSearch, disabled }: SearchBarProps) {
         Search
       </button>
     </form>
-  )
+  );
 }

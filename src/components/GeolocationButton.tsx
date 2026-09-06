@@ -1,13 +1,22 @@
 interface GeolocationButtonProps {
-  onLocate: (coords: { lat: number; lon: number } | null, error: Error | null) => void
-  disabled?: boolean
+  onLocate: (
+    coords: { lat: number; lon: number } | null,
+    error: Error | null,
+  ) => void;
+  disabled?: boolean;
 }
 
-export default function GeolocationButton({ onLocate, disabled }: GeolocationButtonProps) {
+export default function GeolocationButton({
+  onLocate,
+  disabled,
+}: GeolocationButtonProps) {
   function handleClick() {
     if (!navigator.geolocation) {
-      onLocate(null, new Error('Geolocation is not supported by your browser.'))
-      return
+      onLocate(
+        null,
+        new Error("Geolocation is not supported by your browser."),
+      );
+      return;
     }
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -16,18 +25,21 @@ export default function GeolocationButton({ onLocate, disabled }: GeolocationBut
             lat: position.coords.latitude,
             lon: position.coords.longitude,
           },
-          null
-        )
+          null,
+        );
       },
       (error) => {
-        onLocate(null, new Error(error.message || 'Unable to retrieve your location.'))
-      }
-    )
+        onLocate(
+          null,
+          new Error(error.message || "Unable to retrieve your location."),
+        );
+      },
+    );
   }
 
   return (
     <button type="button" onClick={handleClick} disabled={disabled}>
       Use my location
     </button>
-  )
+  );
 }
