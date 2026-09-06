@@ -49,7 +49,7 @@ export default function useWeatherForcast() {
       const query: Query = { type: "city", city };
       void runQuery(query);
     },
-    [runQuery, units],
+    [runQuery],
   );
 
   const loadByCoords = useCallback(
@@ -65,15 +65,12 @@ export default function useWeatherForcast() {
       const query: Query = { type: "coords", lat: coords.lat, lon: coords.lon };
       void runQuery(query);
     },
-    [runQuery, units],
+    [runQuery],
   );
 
-  const changeUnits = useCallback(
-    (nextUnits: Units) => {
-      setUnits(nextUnits);
-    },
-    [units],
-  );
+  const changeUnits = (nextUnits: Units) => {
+    setUnits(nextUnits);
+  };
 
   return {
     days,

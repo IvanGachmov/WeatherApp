@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import * as api from './api/weatherApi'
@@ -41,8 +41,9 @@ describe('App', () => {
     await waitFor(() => {
       expect(screen.getByText(/Paris, FR/)).toBeInTheDocument()
     })
-    expect(api.fetchForecastByCity).toHaveBeenCalledWith('Paris', 'metric')
-    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+    expect(api.fetchForecastByCity).toHaveBeenCalledWith('Paris')
+    const forecastList = screen.getAllByRole('list')[0]
+    expect(within(forecastList).getAllByRole('listitem')).toHaveLength(2)
   })
 
   it('shows an error message when the API request fails', async () => {
@@ -73,7 +74,7 @@ describe('App', () => {
     expect(screen.getByText(/hourly forecast for/i)).toBeInTheDocument()
   })
 
-  it('re-fetches with the new units when the unit selector changes', async () => {
+  it('changes display units without making another API request', async () => {
     vi.spyOn(api, 'fetchForecastByCity').mockResolvedValue(sampleResponse)
     const user = userEvent.setup()
 
@@ -81,11 +82,11 @@ describe('App', () => {
     await user.type(screen.getByLabelText(/city name/i), 'Paris')
     await user.click(screen.getByRole('button', { name: /search/i }))
     await waitFor(() => screen.getByText(/Paris, FR/))
+    expect(api.fetchForecastByCity).toHaveBeenCalledTimes(1)
 
     await user.selectOptions(screen.getByRole('combobox'), 'imperial')
 
-    await waitFor(() => {
-      expect(api.fetchForecastByCity).toHaveBeenLastCalledWith('Paris', 'imperial')
-    })
+    expect(screen.getByRole('combobox')).toHaveValue('imperial')
+    expect(api.fetchForecastByCity).toHaveBeenCalledTimes(1)
   })
 })
