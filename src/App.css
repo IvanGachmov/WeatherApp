@@ -1,0 +1,194 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f4f6f8;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+}
+
+.app__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 8px;
+}
+
+.search-bar input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-width: 220px;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #eef1f4;
+}
+
+.app__units {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.app__units select {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.app__city {
+  margin: 8px 0 16px;
+  font-size: 1.2rem;
+}
+
+.error-message {
+  background: #fdecea;
+  color: #b3261e;
+  border: 1px solid #f5c2c0;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.loading {
+  padding: 10px 0;
+  font-style: italic;
+  color: #555;
+}
+
+.forecast-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.forecast-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.forecast-card--selected {
+  border-color: #2f6feb;
+  box-shadow: 0 0 0 2px rgba(47, 111, 235, 0.25);
+}
+
+.forecast-card__day {
+  font-weight: 600;
+}
+
+.forecast-card__icon {
+  width: 48px;
+  height: 48px;
+}
+
+.forecast-card__description {
+  font-size: 0.85rem;
+  color: #555;
+  text-transform: capitalize;
+}
+
+.forecast-card__temps {
+  display: flex;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.forecast-card__min {
+  color: #777;
+}
+
+.day-detail {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.day-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.day-detail__header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.day-detail__hours {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.day-detail__hour {
+  display: grid;
+  grid-template-columns: 70px 40px 60px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.day-detail__description {
+  text-transform: capitalize;
+  color: #555;
+}
+
+.day-detail__humidity,
+.day-detail__wind {
+  color: #777;
+  font-size: 0.85rem;
+}
