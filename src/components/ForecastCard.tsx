@@ -1,5 +1,5 @@
 import type { ForecastDay, Units } from '../types/weather'
-import { formatDayLabel } from '../utils/groupForecastByDay'
+import { formatDayLabel, formatTemperature } from '../utils/groupForecastByDay'
 
 interface ForecastCardProps {
   day: ForecastDay
@@ -9,7 +9,6 @@ interface ForecastCardProps {
 }
 
 export default function ForecastCard({ day, units, isSelected, onSelect }: ForecastCardProps) {
-  const unitLabel = units === 'imperial' ? '°F' : '°C'
 
   return (
     <button
@@ -27,12 +26,10 @@ export default function ForecastCard({ day, units, isSelected, onSelect }: Forec
       <div className="forecast-card__description">{day.description}</div>
       <div className="forecast-card__temps">
         <span className="forecast-card__max">
-          {Math.round(day.maxTemp)}
-          {unitLabel}
+          {formatTemperature(day.maxTemp, units)}
         </span>
         <span className="forecast-card__min">
-          {Math.round(day.minTemp)}
-          {unitLabel}
+          {formatTemperature(day.minTemp, units)}
         </span>
       </div>
     </button>

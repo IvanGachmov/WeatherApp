@@ -1,5 +1,5 @@
 import type { ForecastDay, Units } from '../types/weather'
-import { formatDayLabel, formatHourLabel } from '../utils/groupForecastByDay'
+import { formatDayLabel, formatHourLabel,formatTemperature } from '../utils/groupForecastByDay'
 
 interface DayDetailProps {
   day: ForecastDay | null
@@ -9,7 +9,6 @@ interface DayDetailProps {
 
 export default function DayDetail({ day, units, onClose }: DayDetailProps) {
   if (!day) return null
-  const unitLabel = units === 'imperial' ? '°F' : '°C'
   const windUnit = units === 'imperial' ? 'mph' : 'm/s'
 
   return (
@@ -32,8 +31,7 @@ export default function DayDetail({ day, units, onClose }: DayDetailProps) {
               alt={entry.weather[0].description}
             />
             <span className="day-detail__temp">
-              {Math.round(entry.main.temp)}
-              {unitLabel}
+              {formatTemperature(entry.main.temp,units)}
             </span>
             <span className="day-detail__description">{entry.weather[0].description}</span>
             <span className="day-detail__humidity">Humidity: {entry.main.humidity}%</span>

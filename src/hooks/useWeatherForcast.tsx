@@ -12,7 +12,6 @@ export default function useWeatherForcast() {
 	const [selectedDate, setSelectedDate] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
-	const [lastQuery, setLastQuery] = useState<Query | null>(null)
 
 	const applyForecastResponse = useCallback((data: ForecastApiResponse) => {
 		const grouped = groupForecastByDay(data.list)
@@ -22,15 +21,15 @@ export default function useWeatherForcast() {
 	}, [])
 
 	const runQuery = useCallback(
-		async (query: Query, queryUnits: Units) => {
+		async (query: Query) => {
 			setLoading(true)
 			setError(null)
 
 			try {
 				const data =
 					query.type === 'city'
-						? await fetchForecastByCity(query.city, queryUnits)
-						: await fetchForecastByCoords(query.lat, query.lon, queryUnits)
+						? await fetchForecastByCity(query.city)
+						: await fetchForecastByCoords(query.lat, query.lon)
 				applyForecastResponse(data)
 			} catch (err) {
 				setError(err instanceof Error ? err.message : 'Something went wrong.')
@@ -45,8 +44,7 @@ export default function useWeatherForcast() {
 	const searchCity = useCallback(
 		(city: string) => {
 			const query: Query = { type: 'city', city }
-			setLastQuery(query)
-			void runQuery(query, units)
+			void runQuery(query)
 		},
 		[runQuery, units]
 	)
@@ -59,8 +57,7 @@ export default function useWeatherForcast() {
 			}
 
 			const query: Query = { type: 'coords', lat: coords.lat, lon: coords.lon }
-			setLastQuery(query)
-			void runQuery(query, units)
+			void runQuery(query)
 		},
 		[runQuery, units]
 	)
@@ -68,11 +65,9 @@ export default function useWeatherForcast() {
 	const changeUnits = useCallback(
 		(nextUnits: Units) => {
 			setUnits(nextUnits)
-			if (lastQuery) {
-				void runQuery(lastQuery, nextUnits)
-			}
+		
 		},
-		[lastQuery, runQuery]
+		[units]
 	)
 
 	return {

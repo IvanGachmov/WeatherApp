@@ -39,6 +39,7 @@ export default function App() {
           >
             <option value="metric">Celsius</option>
             <option value="imperial">Fahrenheit</option>
+            <option value="kelvin">Kelvin</option>
           </select>
         </label>
       </div>

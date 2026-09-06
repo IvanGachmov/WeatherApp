@@ -59,3 +59,13 @@ export function formatHourLabel(dtText: string): string {
     minute: '2-digit',
   })
 }
+
+export function formatTemperature(temp: number, units: 'metric' | 'imperial' | 'kelvin'): string {
+  if(units === 'metric'){
+    return `${Math.round(temp -273.15)}°C`
+  }else if(units === 'imperial'){
+    return `${Math.round((temp - 273.15) * 9/5 + 32)}°F`
+  }else{
+    return `${Math.round(temp)}K`
+  }
+}

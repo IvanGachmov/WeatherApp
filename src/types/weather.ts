@@ -1,4 +1,4 @@
-export type Units = 'metric' | 'imperial'
+export type Units = 'metric' | 'imperial' | 'kelvin'
 
 export interface WeatherCondition {
   description: string
