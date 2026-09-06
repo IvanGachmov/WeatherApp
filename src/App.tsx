@@ -1,11 +1,11 @@
-import SearchBar from './components/SearchBar'
-import GeolocationButton from './components/GeolocationButton'
-import ForecastList from './components/ForecastList'
-import DayDetail from './components/DayDetail'
-import ErrorMessage from './components/ErrorMessage'
-import LoadingSpinner from './components/LoadingSpinner'
-import useWeatherForcast from './hooks/useWeatherForcast'
-import type { Units } from './types/weather'
+import SearchBar from "./components/SearchBar";
+import GeolocationButton from "./components/GeolocationButton";
+import ForecastList from "./components/ForecastList";
+import DayDetail from "./components/DayDetail";
+import ErrorMessage from "./components/ErrorMessage";
+import LoadingSpinner from "./components/LoadingSpinner";
+import useWeatherForecast from "./hooks/useWeatherForecast";
+import type { Units } from "./types/weather";
 
 export default function App() {
   const {
@@ -19,9 +19,9 @@ export default function App() {
     searchCity,
     loadByCoords,
     changeUnits,
-  } = useWeatherForcast()
+  } = useWeatherForecast();
 
-  const selectedDay = days.find((d) => d.date === selectedDate) || null
+  const selectedDay = days.find((d) => d.date === selectedDate) || null;
 
   return (
     <main className="app">
@@ -57,8 +57,12 @@ export default function App() {
       />
 
       {selectedDay && (
-        <DayDetail day={selectedDay} units={units} onClose={() => setSelectedDate(null)} />
+        <DayDetail
+          day={selectedDay}
+          units={units}
+          onClose={() => setSelectedDate(null)}
+        />
       )}
     </main>
-  )
+  );
 }

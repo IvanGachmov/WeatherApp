@@ -6,7 +6,7 @@ import type { ForecastApiResponse, ForecastDay, Units } from "../types/weather";
 type Query =
   { type: "city"; city: string } | { type: "coords"; lat: number; lon: number };
 
-export default function useWeatherForcast() {
+export default function useWeatherForeecast() {
   const [days, setDays] = useState<ForecastDay[]>([]);
   const [cityLabel, setCityLabel] = useState("");
   const [units, setUnits] = useState<Units>("metric");
@@ -37,6 +37,8 @@ export default function useWeatherForcast() {
       } catch (err) {
         setError(err instanceof Error ? err.message : "Something went wrong.");
         setDays([]);
+        setCityLabel("");
+        setSelectedDate(null);
       } finally {
         setLoading(false);
       }
@@ -68,9 +70,9 @@ export default function useWeatherForcast() {
     [runQuery],
   );
 
-  const changeUnits = (nextUnits: Units) => {
+  const changeUnits = useCallback((nextUnits: Units) => {
     setUnits(nextUnits);
-  };
+  }, []);
 
   return {
     days,
