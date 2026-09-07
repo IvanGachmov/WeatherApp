@@ -11,14 +11,14 @@ const sampleResponse: ForecastApiResponse = {
     {
       dt: 1704110400,
       dt_txt: "2024-01-01 12:00:00",
-      main: { temp: 10, temp_min: 8, temp_max: 12, humidity: 60 },
+      main: { temp: 273.15, temp_min: 273.15, temp_max: 273.15, humidity: 60 },
       weather: [{ description: "clear sky", icon: "01d" }],
       wind: { speed: 2 },
     },
     {
       dt: 1704196800,
       dt_txt: "2024-01-02 12:00:00",
-      main: { temp: 9, temp_min: 7, temp_max: 11, humidity: 65 },
+      main: { temp: 280.15, temp_min: 280.15, temp_max: 280.15, humidity: 65 },
       weather: [{ description: "few clouds", icon: "02d" }],
       wind: { speed: 3 },
     },
@@ -87,10 +87,19 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: /search/i }));
     await waitFor(() => screen.getByText(/Paris, FR/));
     expect(api.fetchForecastByCity).toHaveBeenCalledTimes(1);
+    expect(screen.getAllByText("0°C").length).toBeGreaterThan(0);
+    expect(screen.getByText("Wind: 2 m/s")).toBeInTheDocument();
 
     await user.selectOptions(screen.getByRole("combobox"), "imperial");
 
     expect(screen.getByRole("combobox")).toHaveValue("imperial");
+    expect(screen.getAllByText("32°F").length).toBeGreaterThan(0);
+    expect(screen.getByText("Wind: 4 mph")).toBeInTheDocument();
+
+    await user.selectOptions(screen.getByRole("combobox"), "kelvin");
+
+    expect(screen.getByRole("combobox")).toHaveValue("kelvin");
+    expect(screen.getAllByText("273K").length).toBeGreaterThan(0);
     expect(api.fetchForecastByCity).toHaveBeenCalledTimes(1);
   });
 });

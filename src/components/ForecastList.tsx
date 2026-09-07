@@ -11,7 +11,7 @@ interface ForecastListProps {
 
 const ForecastList = React.memo(
   ({ days, units, selectedDate, onSelectDay }: ForecastListProps) => {
-    if (!days || days.length === 0) return null;
+    if (days.length === 0) return null;
 
     return (
       <div className="forecast-list" role="list">
