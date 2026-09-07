@@ -28,9 +28,11 @@ using the
    VITE_OWM_API_KEY=your_api_key_here
    ```
 4. Run the app:
+
    ```bash
    npm run dev
    ```
+
    Then open the printed local URL in your browser.
 
    Note: a fresh OpenWeatherMap API key can take a few minutes (sometimes longer) to activate.
@@ -44,6 +46,7 @@ npm test
 Runs the Jest suite once. Use `npm run test:watch` for watch mode.
 
 Coverage includes:
+
 - `groupForecastByDay` — the core transformation of the raw 40-entry, 3-hour
   API list into 5 daily summaries (grouping, min/max temps, representative
   icon/description, edge cases like empty input).
@@ -52,15 +55,16 @@ Coverage includes:
 - `ForecastList` — renders one card per day, forwards selection, renders
   nothing when empty.
 - `App` — integration tests with the API module mocked: successful search,
-  error display, drilling into a day's hourly detail, and re-fetching when
-  units change.
+  coordinate lookup, error display, drilling into a day's hourly detail,
+  timezone-aware times, and changing units without another request.
 
 ## Project structure
 
 ```
 src/
   main.tsx                     Vite entry point
-  App.tsx                      top-level state (useState) and orchestration
+  App.tsx                      top-level layout and orchestration
+  hooks/useWeatherForecast.ts  forecast state and request orchestration
   types/weather.ts             shared TypeScript types for the forecast domain
   api/weatherApi.ts            typed fetch wrappers for the OpenWeatherMap endpoint
   utils/groupForecastByDay.ts  pure transform: raw API list -> daily summaries
@@ -74,8 +78,8 @@ src/
     LoadingSpinner.tsx
 ```
 
-All state (forecast data, units, loading/error, selected day) lives in
-`App.tsx` via `useState`/`useCallback` and flows down to components as
+Forecast state (data, units, loading/error, selected day) lives in
+`useWeatherForecast` and flows down to components as
 typed props — no global state library or Context involved.
 
 ## Design notes / assumptions
