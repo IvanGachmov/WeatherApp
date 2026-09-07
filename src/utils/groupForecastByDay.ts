@@ -64,17 +64,18 @@ export function groupForecastByDay(
 }
 
 export function formatDayLabel(dateString: string): string {
-  const date = new Date(`${dateString}T00:00:00`);
+  const [year, month, day] = dateString.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
   return date.toLocaleDateString(undefined, {
     weekday: "short",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
-export function formatHourLabel(dtText: string, timezoneOffset = 0): string {
-  const utcTimestamp = Date.parse(`${dtText.replace(" ", "T")}Z`);
-  const date = new Date(utcTimestamp + timezoneOffset * 1000);
+export function formatHourLabel(dt: number, timezoneOffset = 0): string {
+  const date = new Date(dt * 1000 + timezoneOffset * 1000);
   return date.toLocaleTimeString(undefined, {
     hour: "numeric",
     minute: "2-digit",

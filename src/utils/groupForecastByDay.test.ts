@@ -99,13 +99,18 @@ describe("formatDayLabel", () => {
 
 describe("formatHourLabel", () => {
   it("formats a dt_txt string into a non-empty time label", () => {
-    const label = formatHourLabel("2024-01-01 15:00:00");
+    const label = formatHourLabel(
+      Date.parse("2024-01-01T15:00:00Z") / 1000,
+    );
     expect(typeof label).toBe("string");
     expect(label.length).toBeGreaterThan(0);
   });
 
   it("formats the hour in the forecast city's timezone", () => {
-    const label = formatHourLabel("2024-01-01 23:00:00", 2 * 60 * 60);
+    const label = formatHourLabel(
+      Date.parse("2024-01-01T23:00:00Z") / 1000,
+      2 * 60 * 60,
+    );
 
     expect(label).toMatch(/1:00\s*AM/i);
   });

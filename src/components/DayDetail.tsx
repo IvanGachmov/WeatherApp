@@ -35,7 +35,7 @@ const DayDetail = React.memo(({ day, units, onClose }: DayDetailProps) => {
         {day.entries.map((entry) => (
           <li key={entry.dt} className="day-detail__hour">
             <span className="day-detail__time">
-              {formatHourLabel(entry.dt_txt, day.timezoneOffset)}
+              {formatHourLabel(entry.dt, day.timezoneOffset)}
             </span>
             <img
               src={`https://openweathermap.org/img/wn/${entry.weather[0].icon}.png`}
