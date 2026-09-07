@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import SearchBar from "./components/SearchBar";
 import GeolocationButton from "./components/GeolocationButton";
 import ForecastList from "./components/ForecastList";
@@ -22,6 +23,10 @@ export default function App() {
   } = useWeatherForecast();
 
   const selectedDay = days.find((d) => d.date === selectedDate) || null;
+
+  const closeDayDetail = useCallback(() => {
+    setSelectedDate(null);
+  }, [setSelectedDate]);
 
   return (
     <main className="app">
@@ -57,11 +62,7 @@ export default function App() {
       />
 
       {selectedDay && (
-        <DayDetail
-          day={selectedDay}
-          units={units}
-          onClose={() => setSelectedDate(null)}
-        />
+        <DayDetail day={selectedDay} units={units} onClose={closeDayDetail} />
       )}
     </main>
   );

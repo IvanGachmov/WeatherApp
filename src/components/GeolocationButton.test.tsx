@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import GeolocationButton from "./GeolocationButton";
@@ -9,6 +9,10 @@ function setGeolocation(value: Geolocation) {
     value,
   });
 }
+
+afterEach(() => {
+  Reflect.deleteProperty(navigator, "geolocation");
+});
 
 describe("GeolocationButton", () => {
   it("returns the user's coordinates when geolocation succeeds", async () => {
@@ -24,17 +28,16 @@ describe("GeolocationButton", () => {
     render(<GeolocationButton onLocate={onLocate} />);
     await user.click(screen.getByRole("button", { name: /use my location/i }));
 
-    expect(onLocate).toHaveBeenCalledWith(
-      { lat: 48.8566, lon: 2.3522 },
-      null,
-    );
+    expect(onLocate).toHaveBeenCalledWith({ lat: 48.8566, lon: 2.3522 }, null);
   });
 
   it("returns the browser error when geolocation is denied", async () => {
     const onLocate = vi.fn();
     const getCurrentPosition = vi.fn(
       (_success: PositionCallback, failure: PositionErrorCallback) => {
-        failure({ message: "User denied Geolocation" } as GeolocationPositionError);
+        failure({
+          message: "User denied Geolocation",
+        } as GeolocationPositionError);
       },
     );
     setGeolocation({ getCurrentPosition } as unknown as Geolocation);

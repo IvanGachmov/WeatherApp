@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { afterEach, describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -25,9 +25,22 @@ const sampleResponse: ForecastApiResponse = {
   ],
 };
 
+const originalGeolocation = Object.getOwnPropertyDescriptor(
+  navigator,
+  "geolocation",
+);
+
 describe("App", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    if (originalGeolocation) {
+      Object.defineProperty(navigator, "geolocation", originalGeolocation);
+    } else {
+      Reflect.deleteProperty(navigator, "geolocation");
+    }
   });
 
   it("searches for a city and displays the resulting forecast", async () => {
@@ -59,6 +72,31 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent("city not found");
     });
+  });
+
+  it("loads a forecast using the user's coordinates", async () => {
+    const fetchForecastByCoords = vi
+      .spyOn(api, "fetchForecastByCoords")
+      .mockResolvedValue(sampleResponse);
+    Object.defineProperty(navigator, "geolocation", {
+      configurable: true,
+      value: {
+        getCurrentPosition: (success: PositionCallback) => {
+          success({
+            coords: { latitude: 48.8566, longitude: 2.3522 },
+          } as GeolocationPosition);
+        },
+      },
+    });
+    const user = userEvent.setup();
+
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: /use my location/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Paris, FR/)).toBeInTheDocument();
+    });
+    expect(fetchForecastByCoords).toHaveBeenCalledWith(48.8566, 2.3522);
   });
 
   it("shows hourly detail when a day card is selected", async () => {
