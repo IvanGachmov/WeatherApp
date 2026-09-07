@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface GeolocationButtonProps {
   onLocate: (
     coords: { lat: number; lon: number } | null,
@@ -10,16 +12,23 @@ export default function GeolocationButton({
   onLocate,
   disabled,
 }: GeolocationButtonProps) {
+  const [locating, setLocating] = useState(false);
+
   function handleClick() {
+    if (locating) return;
+    setLocating(true);
+
     if (!navigator.geolocation) {
       onLocate(
         null,
         new Error("Geolocation is not supported by your browser."),
       );
+      setLocating(false);
       return;
     }
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        setLocating(false);
         onLocate(
           {
             lat: position.coords.latitude,
@@ -29,6 +38,7 @@ export default function GeolocationButton({
         );
       },
       (error) => {
+        setLocating(false);
         onLocate(
           null,
           new Error(error.message || "Unable to retrieve your location."),
@@ -38,7 +48,7 @@ export default function GeolocationButton({
   }
 
   return (
-    <button type="button" onClick={handleClick} disabled={disabled}>
+    <button type="button" onClick={handleClick} disabled={disabled || locating}>
       Use my location
     </button>
   );

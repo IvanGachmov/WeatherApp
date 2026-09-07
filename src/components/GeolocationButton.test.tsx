@@ -31,6 +31,23 @@ describe("GeolocationButton", () => {
     expect(onLocate).toHaveBeenCalledWith({ lat: 48.8566, lon: 2.3522 }, null);
   });
 
+  it("disables repeated requests while location is pending", async () => {
+    const onLocate = jest.fn();
+    const getCurrentPosition = jest.fn();
+    setGeolocation({ getCurrentPosition } as unknown as Geolocation);
+
+    const user = userEvent.setup();
+    render(<GeolocationButton onLocate={onLocate} />);
+    const button = screen.getByRole("button", { name: /use my location/i });
+
+    await user.click(button);
+    expect(button).toBeDisabled();
+
+    await user.click(button);
+    expect(getCurrentPosition).toHaveBeenCalledTimes(1);
+    expect(onLocate).not.toHaveBeenCalled();
+  });
+
   it("returns the browser error when geolocation is denied", async () => {
     const onLocate = jest.fn();
     const getCurrentPosition = jest.fn(
