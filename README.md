@@ -10,7 +10,7 @@ using the
 - **City search**: enter any city name to load its forecast.
 - **5-day overview**: one card per day with a min/max temperature and conditions icon.
 - **Hourly drill-down**: click a day to see the 3-hour interval breakdown (temp, description, humidity, wind).
-- **Units toggle**: switch between Celsius and Fahrenheit; the current view re-fetches automatically.
+- **Units toggle**: switch between Celsius, Fahrenheit, and Kelvin without another API request.
 - Loading and error states, with the error message showing the API's own message when available.
 
 ## Setup
