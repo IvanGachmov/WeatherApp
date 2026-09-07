@@ -20,10 +20,7 @@ using the
    npm install
    ```
 2. Get a free API key at https://openweathermap.org/api
-3. Copy `.env.example` to `.env` and add your key:
-   ```bash
-   cp .env.example .env
-   ```
+3. Create an `.env` file and add your key:
    ```
    VITE_OWM_API_KEY=your_api_key_here
    ```
