@@ -41,7 +41,7 @@ using the
 npm test
 ```
 
-Runs the Vitest suite once. Use `npm run test:watch` for watch mode.
+Runs the Jest suite once. Use `npm run test:watch` for watch mode.
 
 Coverage includes:
 - `groupForecastByDay` — the core transformation of the raw 40-entry, 3-hour

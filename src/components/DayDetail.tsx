@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import type { ForecastDay, Units } from "../types/weather";
 import {
   formatDayLabel,
@@ -13,7 +13,7 @@ interface DayDetailProps {
   onClose: () => void;
 }
 
-const DayDetail = React.memo(({ day, units, onClose }: DayDetailProps) => {
+const DayDetail = memo(({ day, units, onClose }: DayDetailProps) => {
   if (!day) return null;
 
   return (

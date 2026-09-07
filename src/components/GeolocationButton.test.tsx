@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import GeolocationButton from "./GeolocationButton";
@@ -16,8 +16,8 @@ afterEach(() => {
 
 describe("GeolocationButton", () => {
   it("returns the user's coordinates when geolocation succeeds", async () => {
-    const onLocate = vi.fn();
-    const getCurrentPosition = vi.fn((success: PositionCallback) => {
+    const onLocate = jest.fn();
+    const getCurrentPosition = jest.fn((success: PositionCallback) => {
       success({
         coords: { latitude: 48.8566, longitude: 2.3522 },
       } as GeolocationPosition);
@@ -32,8 +32,8 @@ describe("GeolocationButton", () => {
   });
 
   it("returns the browser error when geolocation is denied", async () => {
-    const onLocate = vi.fn();
-    const getCurrentPosition = vi.fn(
+    const onLocate = jest.fn();
+    const getCurrentPosition = jest.fn(
       (_success: PositionCallback, failure: PositionErrorCallback) => {
         failure({
           message: "User denied Geolocation",
@@ -53,7 +53,7 @@ describe("GeolocationButton", () => {
   });
 
   it("returns an error when geolocation is unsupported", async () => {
-    const onLocate = vi.fn();
+    const onLocate = jest.fn();
     setGeolocation(undefined as unknown as Geolocation);
 
     const user = userEvent.setup();

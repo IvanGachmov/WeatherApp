@@ -1,9 +1,15 @@
-import { afterEach, describe, it, expect, vi, beforeEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "./App";
-import * as api from "./api/weatherApi";
 import type { ForecastApiResponse } from "./types/weather";
+
+jest.unstable_mockModule("./api/weatherApi", () => ({
+  fetchForecastByCity: jest.fn(),
+  fetchForecastByCoords: jest.fn(),
+}));
+
+const api = await import("./api/weatherApi");
+const { default: App } = await import("./App");
 
 const sampleResponse: ForecastApiResponse = {
   city: { name: "Paris", country: "FR", timezone: 2 * 60 * 60 },
@@ -32,7 +38,7 @@ const originalGeolocation = Object.getOwnPropertyDescriptor(
 
 describe("App", () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -44,7 +50,8 @@ describe("App", () => {
   });
 
   it("searches for a city and displays the resulting forecast", async () => {
-    vi.spyOn(api, "fetchForecastByCity").mockResolvedValue(sampleResponse);
+    const mockFetchForecastByCity = jest.mocked(api.fetchForecastByCity);
+    mockFetchForecastByCity.mockResolvedValue(sampleResponse);
     const user = userEvent.setup();
 
     render(<App />);
@@ -60,9 +67,8 @@ describe("App", () => {
   });
 
   it("shows an error message when the API request fails", async () => {
-    vi.spyOn(api, "fetchForecastByCity").mockRejectedValue(
-      new Error("city not found"),
-    );
+    const mockFetchForecastByCity = jest.mocked(api.fetchForecastByCity);
+    mockFetchForecastByCity.mockRejectedValue(new Error("city not found"));
     const user = userEvent.setup();
 
     render(<App />);
@@ -75,9 +81,8 @@ describe("App", () => {
   });
 
   it("loads a forecast using the user's coordinates", async () => {
-    const fetchForecastByCoords = vi
-      .spyOn(api, "fetchForecastByCoords")
-      .mockResolvedValue(sampleResponse);
+    const mockFetchForecastByCoords = jest.mocked(api.fetchForecastByCoords);
+    mockFetchForecastByCoords.mockResolvedValue(sampleResponse);
     Object.defineProperty(navigator, "geolocation", {
       configurable: true,
       value: {
@@ -96,11 +101,12 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByText(/Paris, FR/)).toBeInTheDocument();
     });
-    expect(fetchForecastByCoords).toHaveBeenCalledWith(48.8566, 2.3522);
+    expect(mockFetchForecastByCoords).toHaveBeenCalledWith(48.8566, 2.3522);
   });
 
   it("shows hourly detail when a day card is selected", async () => {
-    vi.spyOn(api, "fetchForecastByCity").mockResolvedValue(sampleResponse);
+    const mockFetchForecastByCity = jest.mocked(api.fetchForecastByCity);
+    mockFetchForecastByCity.mockResolvedValue(sampleResponse);
     const user = userEvent.setup();
 
     render(<App />);
@@ -118,7 +124,8 @@ describe("App", () => {
   });
 
   it("changes display units without making another API request", async () => {
-    vi.spyOn(api, "fetchForecastByCity").mockResolvedValue(sampleResponse);
+    const mockFetchForecastByCity = jest.mocked(api.fetchForecastByCity);
+    mockFetchForecastByCity.mockResolvedValue(sampleResponse);
     const user = userEvent.setup();
 
     render(<App />);

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ForecastList from "./ForecastList";
@@ -42,7 +42,7 @@ describe("ForecastList", () => {
 
   it("calls onSelectDay with the date when a card is clicked", async () => {
     const user = userEvent.setup();
-    const onSelectDay = vi.fn();
+    const onSelectDay = jest.fn();
     render(
       <ForecastList
         days={days}

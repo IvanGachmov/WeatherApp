@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SearchBar from "./SearchBar";
@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 describe("SearchBar", () => {
   it("calls onSearch with the trimmed city name on submit", async () => {
     const user = userEvent.setup();
-    const onSearch = vi.fn();
+    const onSearch = jest.fn();
     render(<SearchBar onSearch={onSearch} />);
 
     await user.type(screen.getByLabelText(/city name/i), "  Paris  ");
@@ -17,7 +17,7 @@ describe("SearchBar", () => {
 
   it("does not call onSearch when the input is empty", async () => {
     const user = userEvent.setup();
-    const onSearch = vi.fn();
+    const onSearch = jest.fn();
     render(<SearchBar onSearch={onSearch} />);
 
     await user.click(screen.getByRole("button", { name: /search/i }));

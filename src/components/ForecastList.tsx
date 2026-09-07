@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import ForecastCard from "./ForecastCard";
 import type { ForecastDay, Units } from "../types/weather";
 
@@ -9,7 +9,7 @@ interface ForecastListProps {
   onSelectDay: (date: string) => void;
 }
 
-const ForecastList = React.memo(
+const ForecastList = memo(
   ({ days, units, selectedDate, onSelectDay }: ForecastListProps) => {
     if (days.length === 0) return null;
 

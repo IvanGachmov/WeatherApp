@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import type { ForecastDay, Units } from "../types/weather";
 import { formatDayLabel, formatTemperature } from "../utils/groupForecastByDay";
 
@@ -9,7 +9,7 @@ interface ForecastCardProps {
   onSelect: (date: string) => void;
 }
 
-const ForecastCard = React.memo(
+const ForecastCard = memo(
   ({ day, units, isSelected, onSelect }: ForecastCardProps) => {
     return (
       <button
