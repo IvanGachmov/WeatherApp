@@ -24,6 +24,7 @@ export interface ForecastApiResponse {
   city: {
     name: string;
     country: string;
+    timezone: number;
   };
   list: ForecastEntry[];
 }
@@ -36,4 +37,5 @@ export interface ForecastDay {
   avgTemp: number;
   description: string;
   icon: string;
+  timezoneOffset: number;
 }

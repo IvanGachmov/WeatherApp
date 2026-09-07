@@ -6,11 +6,28 @@ import type { ForecastDay, ForecastEntry } from "../types/weather";
  * day and derives summary stats (min/max temp, a representative icon
  * and description) for each day.
  */
-export function groupForecastByDay(list: ForecastEntry[] = []): ForecastDay[] {
+function getCityTimestamp(entry: ForecastEntry, timezoneOffset: number): number {
+  return entry.dt * 1000 + timezoneOffset * 1000;
+}
+
+function getCityDate(entry: ForecastEntry, timezoneOffset: number): string {
+  return new Date(getCityTimestamp(entry, timezoneOffset))
+    .toISOString()
+    .slice(0, 10);
+}
+
+function getCityHour(entry: ForecastEntry, timezoneOffset: number): number {
+  return new Date(getCityTimestamp(entry, timezoneOffset)).getUTCHours();
+}
+
+export function groupForecastByDay(
+  list: ForecastEntry[] = [],
+  timezoneOffset = 0,
+): ForecastDay[] {
   const byDate = new Map<string, ForecastEntry[]>();
 
   list.forEach((entry) => {
-    const date = entry.dt_txt.split(" ")[0];
+    const date = getCityDate(entry, timezoneOffset);
     if (!byDate.has(date)) {
       byDate.set(date, []);
     }
@@ -25,7 +42,7 @@ export function groupForecastByDay(list: ForecastEntry[] = []): ForecastDay[] {
 
       // Prefer the midday (12:00) reading as representative of the day;
       // otherwise fall back to the middle entry.
-      const midday = entries.find((e) => e.dt_txt.includes("12:00:00"));
+      const midday = entries.find((e) => getCityHour(e, timezoneOffset) === 12);
       const representative = midday || entries[Math.floor(entries.length / 2)];
 
       return {
@@ -36,6 +53,7 @@ export function groupForecastByDay(list: ForecastEntry[] = []): ForecastDay[] {
         avgTemp: temps.reduce((sum, t) => sum + t, 0) / temps.length,
         description: representative.weather[0].description,
         icon: representative.weather[0].icon,
+        timezoneOffset,
       };
     },
   );
@@ -54,11 +72,13 @@ export function formatDayLabel(dateString: string): string {
   });
 }
 
-export function formatHourLabel(dtText: string): string {
-  const date = new Date(dtText.replace(" ", "T"));
+export function formatHourLabel(dtText: string, timezoneOffset = 0): string {
+  const utcTimestamp = Date.parse(`${dtText.replace(" ", "T")}Z`);
+  const date = new Date(utcTimestamp + timezoneOffset * 1000);
   return date.toLocaleTimeString(undefined, {
     hour: "numeric",
     minute: "2-digit",
+    timeZone: "UTC",
   });
 }
 

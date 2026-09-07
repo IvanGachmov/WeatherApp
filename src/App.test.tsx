@@ -6,7 +6,7 @@ import * as api from "./api/weatherApi";
 import type { ForecastApiResponse } from "./types/weather";
 
 const sampleResponse: ForecastApiResponse = {
-  city: { name: "Paris", country: "FR" },
+  city: { name: "Paris", country: "FR", timezone: 0 },
   list: [
     {
       dt: 1704110400,

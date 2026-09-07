@@ -15,7 +15,7 @@ function makeEntry(
   description = "clear sky",
 ): ForecastEntry {
   return {
-    dt: new Date(dtText.replace(" ", "T")).getTime() / 1000,
+    dt: Date.parse(`${dtText.replace(" ", "T")}Z`) / 1000,
     dt_txt: dtText,
     main: { temp, temp_min: tempMin, temp_max: tempMax, humidity: 50 },
     weather: [{ description, icon }],
@@ -35,6 +35,13 @@ describe("groupForecastByDay", () => {
     expect(days[0].date).toBe("2024-01-01");
     expect(days[0].entries).toHaveLength(2);
     expect(days[1].date).toBe("2024-01-02");
+  });
+
+  it("groups entries by the forecast city's local date", () => {
+    const list = [makeEntry("2024-01-01 23:00:00", 10, 8, 12)];
+    const days = groupForecastByDay(list, 2 * 60 * 60);
+
+    expect(days[0].date).toBe("2024-01-02");
   });
 
   it("calculates min and max temps across all entries in the day", () => {
@@ -95,5 +102,11 @@ describe("formatHourLabel", () => {
     const label = formatHourLabel("2024-01-01 15:00:00");
     expect(typeof label).toBe("string");
     expect(label.length).toBeGreaterThan(0);
+  });
+
+  it("formats the hour in the forecast city's timezone", () => {
+    const label = formatHourLabel("2024-01-01 23:00:00", 2 * 60 * 60);
+
+    expect(label).toMatch(/1:00\s*AM/i);
   });
 });

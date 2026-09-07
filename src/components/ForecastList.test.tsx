@@ -13,6 +13,7 @@ const days: ForecastDay[] = [
     description: "clear sky",
     icon: "01d",
     entries: [],
+    timezoneOffset: 0,
   },
   {
     date: "2024-01-02",
@@ -22,6 +23,7 @@ const days: ForecastDay[] = [
     description: "rain",
     icon: "10d",
     entries: [],
+    timezoneOffset: 0,
   },
 ];
 

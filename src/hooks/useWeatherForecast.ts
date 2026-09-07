@@ -15,7 +15,7 @@ export default function useWeatherForecast() {
   const [error, setError] = useState<string | null>(null);
 
   const applyForecastResponse = useCallback((data: ForecastApiResponse) => {
-    const grouped = groupForecastByDay(data.list);
+    const grouped = groupForecastByDay(data.list, data.city.timezone);
     setDays(grouped);
     setCityLabel(
       `${data.city.name}${data.city.country ? ", " + data.city.country : ""}`,
