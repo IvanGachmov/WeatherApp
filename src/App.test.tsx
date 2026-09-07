@@ -6,7 +6,7 @@ import * as api from "./api/weatherApi";
 import type { ForecastApiResponse } from "./types/weather";
 
 const sampleResponse: ForecastApiResponse = {
-  city: { name: "Paris", country: "FR", timezone: 0 },
+  city: { name: "Paris", country: "FR", timezone: 2 * 60 * 60 },
   list: [
     {
       dt: 1704110400,
@@ -69,6 +69,7 @@ describe("App", () => {
     await user.type(screen.getByLabelText(/city name/i), "Paris");
     await user.click(screen.getByRole("button", { name: /search/i }));
     await waitFor(() => screen.getByText(/Paris, FR/));
+    expect(screen.getByText(/2:00 PM/i)).toBeInTheDocument();
 
     const dayButtons = screen.getAllByRole("button", {
       name: /clear sky|few clouds/i,

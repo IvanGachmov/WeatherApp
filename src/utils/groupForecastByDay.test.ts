@@ -98,7 +98,7 @@ describe("formatDayLabel", () => {
 });
 
 describe("formatHourLabel", () => {
-  it("formats a dt_txt string into a non-empty time label", () => {
+  it("formats a Unix timestamp into a non-empty time label", () => {
     const label = formatHourLabel(
       Date.parse("2024-01-01T15:00:00Z") / 1000,
     );
