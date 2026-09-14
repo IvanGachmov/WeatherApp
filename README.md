@@ -91,9 +91,3 @@ typed props — no global state library or Context involved.
   natively.
 - Styling is plain CSS (`App.css`) — functional and readable, not intended
   to be a polished visual design per the assignment's requirements.
-
-## Possible future improvements
-
-- Debounce/autocomplete for city search (e.g. via OpenWeatherMap's geocoding API).
-- Persist the last-searched city/units in localStorage.
-- Graph the hourly temperature trend for the selected day.
